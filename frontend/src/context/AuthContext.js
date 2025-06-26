@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
-
+const API_BASE = process.env.REACT_APP_API_URL || "https://engineering-resource-management-system-5d0n.onrender.com";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     setLoading(true);
     try {
-      const res = await axios.post("/api/auth/login", { email, password });
+      const res = await axios.post(`${API_BASE}/api/auth/login`, { email, password });
       setUser(res.data.user);
       setToken(res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));

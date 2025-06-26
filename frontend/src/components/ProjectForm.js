@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import API_BASE from "../api";
 
 const ProjectForm = ({ onCreated }) => {
   const {
@@ -12,7 +13,7 @@ const ProjectForm = ({ onCreated }) => {
 
   const onSubmit = async (data) => {
     try {
-      await axios.post("/api/projects", data);
+      await axios.post(`${API_BASE}/api/projects`, data);
       reset();
       if (onCreated) onCreated();
       alert("Project created!");

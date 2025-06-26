@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import API_BASE from "../api";
 
 const EditAssignmentForm = ({ assignment, onClose, onUpdated }) => {
   const { register, handleSubmit } = useForm({
@@ -14,7 +15,7 @@ const EditAssignmentForm = ({ assignment, onClose, onUpdated }) => {
 
   const onSubmit = async (data) => {
     try {
-      await axios.put(`/api/assignments/${assignment._id}`, data);
+      await axios.put(`${API_BASE}/api/assignments/${assignment._id}`, data);
       if (onUpdated) onUpdated();
       onClose();
     } catch (err) {

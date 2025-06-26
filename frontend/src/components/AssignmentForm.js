@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+const API_BASE =
+  process.env.REACT_APP_API_URL ||
+  "https://engineering-resource-management-system-5d0n.onrender.com";
 
 const AssignmentForm = ({ onCreated }) => {
   const { register, handleSubmit, reset } = useForm();
@@ -8,13 +11,13 @@ const AssignmentForm = ({ onCreated }) => {
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
-    axios.get("/api/engineers").then((res) => setEngineers(res.data));
-    axios.get("/api/projects").then((res) => setProjects(res.data));
+    axios.get(`${API_BASE}/api/engineers`).then((res) => setEngineers(res.data));
+    axios.get(`${API_BASE}/api/projects`).then((res) => setProjects(res.data));
   }, []);
 
   const onSubmit = async (data) => {
     try {
-      await axios.post("/api/assignments", data);
+      await axios.post(`${API_BASE}/api/assignments`, data);
       reset();
       if (onCreated) onCreated();
       alert("Assignment created!");

@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
+const API_BASE =
+  process.env.REACT_APP_API_URL ||
+  "https://engineering-resource-management-system-5d0n.onrender.com";
 const Profile = () => {
   const [profile, setProfile] = useState(null);
   const [edit, setEdit] = useState(false);
   const [form, setForm] = useState({ name: "", skills: "", department: "" });
 
   useEffect(() => {
-    axios.get("/api/auth/profile").then((res) => {
+    axios.get(`${API_BASE}/api/auth/profile`).then((res) => {
       setProfile(res.data);
       setForm({
         name: res.data.name,
@@ -21,7 +23,7 @@ const Profile = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSave = async () => {
-    await axios.put("/api/auth/profile", {
+    await axios.put(`${API_BASE}/api/auth/profile`, {
       name: form.name,
       skills: form.skills.split(",").map((s) => s.trim()),
       department: form.department,

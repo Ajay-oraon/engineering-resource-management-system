@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import API_BASE from "../api";
 
 const EditProjectForm = ({ project, onClose, onUpdated }) => {
   const { register, handleSubmit } = useForm({
@@ -17,7 +18,7 @@ const EditProjectForm = ({ project, onClose, onUpdated }) => {
 
   const onSubmit = async (data) => {
     try {
-      await axios.put(`/api/projects/${project._id}`, {
+      await axios.put(`${API_BASE}/api/projects/${project._id}`, {
         ...data,
         requiredSkills: data.requiredSkills.split(",").map((s) => s.trim()),
       });

@@ -6,12 +6,11 @@ require("dotenv").config();
 const app = express();
 
 // Middleware
-app.use(
-  cors({
-    origin: "http://localhost:3000", // frontend URL
-    credentials: true,
-  })
-);
+const allowedOrigins = [
+  "https://engineering-resource-management-sys-sooty.vercel.app",
+  "http://localhost:3000",
+];
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(express.json());
 
 // Database connection
