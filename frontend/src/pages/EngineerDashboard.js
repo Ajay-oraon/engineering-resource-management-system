@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
+import API_BASE from "../api";
 
 const EngineerDashboard = () => {
   const { token } = useContext(AuthContext);
@@ -17,7 +18,7 @@ const EngineerDashboard = () => {
     setLoadingAssignments(true);
     setErrorAssignments("");
     axios
-      .get("/api/assignments/my")
+      .get(`${API_BASE}/api/assignments/my`)
       .then((res) => setAssignments(res.data))
       .catch((err) => {
         setErrorAssignments(
@@ -34,7 +35,7 @@ const EngineerDashboard = () => {
     setLoadingProfile(true);
     setErrorProfile("");
     axios
-      .get("/api/auth/profile")
+      .get(`${API_BASE}/api/auth/profile`)
       .then((res) => setProfile(res.data))
       .catch((err) => {
         setErrorProfile(

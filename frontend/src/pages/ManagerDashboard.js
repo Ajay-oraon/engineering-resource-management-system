@@ -5,6 +5,7 @@ import AssignmentForm from "../components/AssignmentForm";
 import EditProjectForm from "../components/EditProjectForm";
 import EditAssignmentForm from "../components/EditAssignmentForm";
 import { AuthContext } from "../context/AuthContext";
+import API_BASE from "../api";
 
 const ManagerDashboard = () => {
   const { token } = useContext(AuthContext);
@@ -22,15 +23,15 @@ const ManagerDashboard = () => {
     if (!token) return;
     setLoading(true);
     axios
-      .get("/api/projects")
+      .get(`${API_BASE}/api/projects`)
       .then((res) => setProjects(res.data))
       .catch(() => setProjects([]));
     axios
-      .get("/api/assignments")
+      .get(`${API_BASE}/api/assignments`)
       .then((res) => setAssignments(res.data))
       .catch(() => setAssignments([]));
     axios
-      .get("/api/engineers")
+      .get(`${API_BASE}/api/engineers`)
       .then((res) => setEngineers(res.data))
       .catch(() => setEngineers([]))
       .finally(() => setLoading(false));
