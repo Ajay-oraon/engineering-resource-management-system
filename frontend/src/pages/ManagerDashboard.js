@@ -18,23 +18,30 @@ const ManagerDashboard = () => {
   const [editingProject, setEditingProject] = useState(null);
   const [editingAssignment, setEditingAssignment] = useState(null);
 
-  // Fetch data only after token is set
+  // Refactor: fetch all dashboard data
+  const fetchDashboardData = async () => {
+    setLoading(true);
+    try {
+      const [projectsRes, assignmentsRes, engineersRes] = await Promise.all([
+        axios.get(`${API_BASE}/api/projects`),
+        axios.get(`${API_BASE}/api/assignments`),
+        axios.get(`${API_BASE}/api/engineers`),
+      ]);
+      setProjects(projectsRes.data);
+      setAssignments(assignmentsRes.data);
+      setEngineers(engineersRes.data);
+    } catch {
+      setProjects([]);
+      setAssignments([]);
+      setEngineers([]);
+    }
+    setLoading(false);
+  };
+
   useEffect(() => {
     if (!token) return;
-    setLoading(true);
-    axios
-      .get(`${API_BASE}/api/projects`)
-      .then((res) => setProjects(res.data))
-      .catch(() => setProjects([]));
-    axios
-      .get(`${API_BASE}/api/assignments`)
-      .then((res) => setAssignments(res.data))
-      .catch(() => setAssignments([]));
-    axios
-      .get(`${API_BASE}/api/engineers`)
-      .then((res) => setEngineers(res.data))
-      .catch(() => setEngineers([]))
-      .finally(() => setLoading(false));
+    fetchDashboardData();
+    // eslint-disable-next-line
   }, [token]);
 
   if (loading) return <div>Loading...</div>;
@@ -48,9 +55,7 @@ const ManagerDashboard = () => {
       >
         {showAssignmentForm ? "Hide Assignment Form" : "Create Assignment"}
       </button>
-      {showAssignmentForm && (
-        <AssignmentForm onCreated={() => window.location.reload()} />
-      )}
+      {showAssignmentForm && <AssignmentForm onCreated={fetchDashboardData} />}
       <table className="min-w-full bg-white rounded shadow">
         <thead>
           <tr>
@@ -97,9 +102,7 @@ const ManagerDashboard = () => {
         >
           {showProjectForm ? "Hide Project Form" : "Create Project"}
         </button>
-        {showProjectForm && (
-          <ProjectForm onCreated={() => window.location.reload()} />
-        )}
+        {showProjectForm && <ProjectForm onCreated={fetchDashboardData} />}
         <table className="min-w-full bg-white rounded shadow">
           <thead>
             <tr>
@@ -133,7 +136,7 @@ const ManagerDashboard = () => {
           <EditProjectForm
             project={editingProject}
             onClose={() => setEditingProject(null)}
-            onUpdated={() => window.location.reload()}
+            onUpdated={fetchDashboardData} // <--- update here
           />
         )}
       </div>
@@ -177,7 +180,7 @@ const ManagerDashboard = () => {
           <EditAssignmentForm
             assignment={editingAssignment}
             onClose={() => setEditingAssignment(null)}
-            onUpdated={() => window.location.reload()}
+            onUpdated={fetchDashboardData}
           />
         )}
       </div>

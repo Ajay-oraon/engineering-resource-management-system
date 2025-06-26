@@ -29,7 +29,14 @@ const Profile = () => {
       department: form.department,
     });
     setEdit(false);
-    window.location.reload();
+    // Refetch profile data instead of reloading
+    const res = await axios.get(`${API_BASE}/api/auth/profile`);
+    setProfile(res.data);
+    setForm({
+      name: res.data.name,
+      skills: res.data.skills?.join(", ") || "",
+      department: res.data.department || "",
+    });
   };
 
   if (!profile) return <div>Loading...</div>;
